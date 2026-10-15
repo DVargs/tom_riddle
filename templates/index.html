@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Diario de Tom Riddle</title>
+    <style>
+        /* Importamos las fuentes caligráficas oficiales estilo Tom Riddle */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Italianno&family=Pinyon+Script&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #080402;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Italianno', 'Pinyon Script', cursive;
+            overflow: hidden;
+        }
+
+        /* === HOJA DE PERGAMINO DEL DIARIO === */
+        .diario-container {
+            width: 100vw;
+            height: 100vh;
+            background: #dca86b;
+            /* Recreación exacta del tono ámbar/miel con sombra de lomo a la izquierda */
+            background-image: 
+                linear-gradient(to right, rgba(15, 8, 3, 0.85) 0%, rgba(15, 8, 3, 0.35) 4%, rgba(15, 8, 3, 0.05) 10%, transparent 18%),
+                radial-gradient(ellipse at 55% 40%, #e8ba7d 0%, #ca9052 65%, #8c5828 100%);
+            padding: 35px 60px 25px 80px; /* Margen extra a la izquierda por la sombra del lomo */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .titulo-diario {
+            font-family: 'Cinzel Decorative', serif;
+            text-align: center;
+            color: #331e0f;
+            font-size: 1.4rem;
+            letter-spacing: 4px;
+            opacity: 0.45;
+            border-bottom: 1px solid rgba(51, 30, 15, 0.2);
+            padding-bottom: 6px;
+        }
+
+        /* === ÁREA DE ESCRITURA Y TINTA === */
+        .hoja-texto {
+            flex-grow: 1;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            overflow-y: auto;
+            /* Tamaño de caligrafía idéntico al fotograma */
+            font-size: 3.4rem; 
+            line-height: 1.3;
+            letter-spacing: 1px;
+            
+            /* Ocultar barra de scroll en todos los navegadores */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .hoja-texto::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Tinta ingresada por el usuario */
+        .texto-usuario {
+            color: #2b180d;
+            text-shadow: 0.5px 0.5px 1px rgba(43, 24, 13, 0.5);
+            opacity: 1;
+            filter: blur(0px);
+            transition: opacity 2.5s ease-in-out, filter 2.5s ease-in-out, transform 2.5s ease-in-out;
+            margin-bottom: 10px;
+        }
+
+        .absorbido {
+            opacity: 0;
+            filter: blur(7px);
+            transform: scale(0.99);
+        }
+
+        /* Tinta de Tom Riddle (Marrón Sepia-Negro caligráfico con leve sangrado en el papel) */
+        .respuesta-tom {
+            color: #1c1008;
+            font-weight: normal;
+            text-shadow: 0.5px 0.5px 1px rgba(28, 16, 8, 0.6), 0 0 2px rgba(28, 16, 8, 0.2);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Animación suave caracter a caracter */
+        .letra-suave {
+            opacity: 0;
+            filter: blur(2px);
+            animation: aparecerTinta 0.35s forwards ease-out;
+        }
+
+        @keyframes aparecerTinta {
+            to {
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        /* === CONTROLES E INPUT MANTENIENDO LA INMERSIÓN === */
+        .panel-interactivo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px dashed rgba(51, 30, 15, 0.25);
+            padding-top: 10px;
+        }
+
+        .runas-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-runa {
+            background: rgba(51, 30, 15, 0.07);
+            border: 1px solid rgba(51, 30, 15, 0.3);
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-family: 'Italianno', cursive;
+            font-size: 1.8rem;
+            color: #2b180d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-runa:hover {
+            background: rgba(43, 24, 13, 0.18);
+            border-color: #1c1008;
+            color: #1c1008;
+            transform: translateY(-2px);
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Italianno', cursive;
+            font-size: 2.8rem;
+            color: #1c1008;
+            text-shadow: 0.5px 0.5px 1px rgba(28, 16, 8, 0.4);
+        }
+
+        ::placeholder {
+            color: rgba(51, 30, 15, 0.45);
+            font-style: italic;
+        }
+
+        .btn-mic {
+            background: none;
+            border: none;
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            opacity: 0.65;
+            filter: sepia(1) hue-rotate(-20deg);
+        }
+
+        .btn-mic:hover {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        .escuchando {
+            animation: pulsoMic 1s infinite alternate;
+        }
+
+        @keyframes pulsoMic {
+            from { transform: scale(1); opacity: 0.6; }
+            to { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 6px #331e0f); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="diario-container">
+    <div class="titulo-diario">T. M. RIDDLE</div>
+    
+    <div class="hoja-texto" id="hoja">
+        <p class="respuesta-tom">Hello... My name is Tom Riddle.</p>
+    </div>
+
+    <div class="panel-interactivo">
+        <!-- Accesos rápidos tipo Runas -->
+        <div class="runas-container">
+            <button class="btn-runa" onclick="enviarPregunta('¿Qué es esta carrera?')">📜 La Carrera</button>
+            <button class="btn-runa" onclick="enviarPregunta('¿Qué materias se cursan?')">🔮 Materias</button>
+            <button class="btn-runa" onclick="enviarPregunta('¿Cuánto dura la carrera?')">⏳ Duración</button>
+            <button class="btn-runa" onclick="enviarPregunta('¿Qué salida laboral tiene?')">💼 Salida Laboral</button>
+        </div>
+
+        <div class="input-row">
+            <button class="btn-mic" id="btnMic" title="Toca para hablar por el micrófono">🎙️</button>
+            <input type="text" id="inputUsuario" placeholder="Escribe aquí o toca el micrófono..." autocomplete="off">
+        </div>
+    </div>
+</div>
+
+<script>
+    const hoja = document.getElementById('hoja');
+    const inputUsuario = document.getElementById('inputUsuario');
+    const btnMic = document.getElementById('btnMic');
+
+    let audioActual = null;
+
+    // === REPRODUCCIÓN DE VOZ IA CON SINCRONÍA DE TEXTO ===
+    function escribirRespuestaConVoz(texto, nombreAudio) {
+        if (audioActual) audioActual.pause();
+        audioActual = new Audio(`/static/audios/${nombreAudio}`);
+        audioActual.play().catch(e => console.log("Audio aguarda interacción previa"));
+
+        const pRespuesta = document.createElement('p');
+        pRespuesta.className = 'respuesta-tom';
+        hoja.appendChild(pRespuesta);
+
+        let i = 0;
+        const intervalo = setInterval(() => {
+            if (i < texto.length) {
+                const spanLetra = document.createElement('span');
+                spanLetra.className = 'letra-suave';
+                spanLetra.textContent = texto.charAt(i);
+                pRespuesta.appendChild(spanLetra);
+                
+                hoja.scrollTop = hoja.scrollHeight;
+                i++;
+            } else {
+                clearInterval(intervalo);
+            }
+        }, 50);
+    }
+
+    // === PROCESAR PREGUNTA ===
+    async function enviarPregunta(textoPregunta) {
+        if (!textoPregunta.trim()) return;
+
+        inputUsuario.value = '';
+
+        // 1. Mostrar texto del usuario
+        const pUsuario = document.createElement('p');
+        pUsuario.className = 'texto-usuario';
+        pUsuario.textContent = '✒️ ' + textoPregunta;
+        hoja.appendChild(pUsuario);
+        hoja.scrollTop = hoja.scrollHeight;
+
+        // 2. Efecto de absorción de tinta suave
+        setTimeout(() => {
+            pUsuario.classList.add('absorbido');
+        }, 1200);
+
+        // 3. Consulta a Flask y respuesta hablada/escrita
+        try {
+            const response = await fetch('/api/preguntar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pregunta: textoPregunta })
+            });
+            const data = await response.json();
+
+            setTimeout(() => {
+                escribirRespuestaConVoz(data.respuesta, data.audio);
+            }, 2600);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // === RECONOCIMIENTO DE VOZ (Web Speech API) ===
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'es-AR';
+        recognition.continuous = false;
+
+        btnMic.addEventListener('click', () => {
+            recognition.start();
+            btnMic.classList.add('escuchando');
+        });
+
+        recognition.onresult = (event) => {
+            btnMic.classList.remove('escuchando');
+            const mensajeVoz = event.results[0][0].transcript;
+            enviarPregunta(mensajeVoz);
+        };
+
+        recognition.onerror = () => btnMic.classList.remove('escuchando');
+        recognition.onend = () => btnMic.classList.remove('escuchando');
+    } else {
+        btnMic.style.display = 'none';
+    }
+
+    // Evento Tecla Enter
+    inputUsuario.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') enviarPregunta(inputUsuario.value);
+    });
+</script>
+
+</body>
+</html>

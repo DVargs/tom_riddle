@@ -1,0 +1,35 @@
+{
+  "reglas": [
+    {
+      "palabras_clave": ["quien sos", "quién eres", "tu nombre", "tom", "riddle"],
+      "respuesta": "Soy Tom Marvolo Riddle. Conservo mis recuerdos guardados en este pergamino para quienes buscan conocimiento verdadero...",
+      "audio": "tom_quien_sos.mp3"
+    },
+    {
+      "palabras_clave": ["carrera", "profesorado", "informatica", "estudiar"],
+      "respuesta": "Estás en el Profesorado de Educación Superior en Informática. Aquí enseñamos a dominar la tecnología, desde la programación hasta la creación de sistemas interactivos...",
+      "audio": "tom_carrera.mp3"
+    },
+    {
+      "palabras_clave": ["materia", "que se enseña", "programacion", "materias"],
+      "respuesta": "Aprenderás Programación, Robótica, Sistemas Operativos, Redes y Didáctica de la Informática para formar a los futuros profesionales...",
+      "audio": "tom_materias.mp3"
+    },
+    {
+      "palabras_clave": ["¿Cuánto dura la carrera?", "duración", "duracion", "años", "cuanto dura", "cuánto dura", "tiempo"],
+      "respuesta": "La carrera tiene una duración de 4 años de formación intensa en software, hardware y desarrollo tecnológico...",
+      "audio": "tom_duracion.mp3"
+    },
+    {
+      "palabras_clave": ["salida laboral", "trabajo", "trabajar", "laburo"],
+      "respuesta": "Podrás ejercer como Docente en escuelas secundarias y terciarias, Asesor Tecnológico, Desarrollador o Diseñador de proyectos educativos...",
+      "audio": "tom_laboral.mp3"
+    }
+  ],
+  "genericas": [
+    {
+      "respuesta": "Veo la curiosidad en tus palabras... Pregúntame sobre el Profesorado de Informática y te daré las respuestas.",
+      "audio": "tom_generico.mp3"
+    }
+  ]
+}
